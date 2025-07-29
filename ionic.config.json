@@ -1,0 +1,7 @@
+{
+  "name": "imagex-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
