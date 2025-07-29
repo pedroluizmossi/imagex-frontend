@@ -1,33 +1,33 @@
 import { Injectable } from '@angular/core';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { Subject } from 'rxjs';
-
-const authCodeFlowConfig: AuthConfig = {
-  issuer: 'https://cognito-idp.us-east-2.amazonaws.com/us-east-2_NkbijYkZT',
-  redirectUri: window.location.origin,
-  clientId: '4u0u5q0rb5cdhvrsf9a0mbvo3j',
-  scope: 'openid profile email',
-  responseType: 'code',
-  dummyClientSecret: undefined,
-  strictDiscoveryDocumentValidation: false,
-  useSilentRefresh: true,
-};
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
   private isAuthenticatedSubject$ = new Subject<boolean>();
   public isAuthenticated$ = this.isAuthenticatedSubject$.asObservable();
+
+  private get authConfig(): AuthConfig {
+    return {
+      issuer: environment.auth.issuer,
+      redirectUri: window.location.origin,
+      clientId: environment.auth.clientId,
+      scope: environment.auth.scope,
+      responseType: environment.auth.responseType,
+      dummyClientSecret: undefined,
+      strictDiscoveryDocumentValidation: environment.auth.strictDiscoveryDocumentValidation,
+      useSilentRefresh: environment.auth.useSilentRefresh,
+    };
+  }
 
   constructor(private oauthService: OAuthService) {}
 
   public async initializeLogin(): Promise<void> {
-    this.oauthService.configure(authCodeFlowConfig);
-
+    this.oauthService.configure(this.authConfig);
     await this.oauthService.loadDiscoveryDocumentAndTryLogin();
-
     this.isAuthenticatedSubject$.next(this.hasValidToken());
   }
 

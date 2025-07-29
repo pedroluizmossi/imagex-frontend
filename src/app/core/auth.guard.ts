@@ -1,8 +1,11 @@
-// src/app/core/auth.guard.ts
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
+/**
+ * Guard to protect routes that require authentication
+ * Redirects to login page if user is not authenticated
+ */
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -11,5 +14,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
+  // Redirect to login if not authenticated
+  router.navigate(['/login']);
   return false;
 };

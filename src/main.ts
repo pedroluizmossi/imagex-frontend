@@ -1,4 +1,3 @@
-// src/main.ts
 import { enableProdMode, importProvidersFrom, APP_INITIALIZER } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
@@ -15,7 +14,10 @@ if (environment.production) {
   enableProdMode();
 }
 
-export function initializeApp(authService: AuthService) {
+/**
+ * Initialize the authentication service before the app starts
+ */
+export function initializeAuth(authService: AuthService) {
   return (): Promise<any> => {
     return authService.initializeLogin();
   };
@@ -30,7 +32,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(OAuthModule.forRoot()),
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeApp,
+      useFactory: initializeAuth,
       deps: [AuthService],
       multi: true,
     },

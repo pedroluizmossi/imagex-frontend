@@ -44,6 +44,6 @@ export class AppComponent {
 
   get username(): string {
     const claims = this.authService.identityClaims;
-    return claims ? claims['name'] || claims['email'] : 'Usuário';
+    return claims ? claims['name'] || claims['email'] : 'User';
   }
 }
