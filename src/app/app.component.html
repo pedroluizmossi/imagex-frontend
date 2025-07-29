@@ -1,3 +1,30 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu content-id="main-content">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>ImageX</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item button *ngIf="!(authService.isAuthenticated$ | async)" (click)="authService.login()">
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          <ion-label>Login</ion-label>
+        </ion-item>
+        <ng-container *ngIf="authService.isAuthenticated$ | async">
+          <ion-item lines="none">
+            <ion-label>
+              <h3>Bem-vindo, {{ username }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item button (click)="authService.logout()">
+            <ion-icon name="log-out-outline" slot="start"></ion-icon>
+            <ion-label>Logout</ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>
