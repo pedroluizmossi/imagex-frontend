@@ -7,5 +7,6 @@ export const environment = {
     responseType: 'code',
     strictDiscoveryDocumentValidation: false,
     useSilentRefresh: true,
-  }
+  },
+  apiUrl: 'https://your-production-api.com'
 };

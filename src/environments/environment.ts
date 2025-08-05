@@ -11,7 +11,8 @@ export const environment = {
     responseType: 'code',
     strictDiscoveryDocumentValidation: false,
     useSilentRefresh: true,
-  }
+  },
+  apiUrl: 'http://localhost:8080'
 };
 
 /*
