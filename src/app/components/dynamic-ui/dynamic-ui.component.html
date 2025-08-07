@@ -1,0 +1,125 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Configuração do Workflow</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    @if (form(); as formGroup) {
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <!-- Campo separado para Folder ID -->
+        <ion-item>
+          <ion-label position="stacked">
+            Pasta de Destino
+            <span style="color: var(--ion-color-danger);">*</span>
+            <ion-note>ID da pasta onde o workflow será executado</ion-note>
+          </ion-label>
+          <ion-input
+            formControlName="folderId"
+            type="text"
+            placeholder="Informe o ID da pasta"
+            [class.ion-invalid]="isFieldInvalid('folderId')"
+            [class.ion-touched]="getFormControl('folderId')?.touched">
+          </ion-input>
+          @if (isFieldInvalid('folderId')) {
+            <ion-note slot="error">{{ getFieldErrorMessage('folderId') }}</ion-note>
+          }
+        </ion-item>
+
+        @for (propertyKey of schemaProperties(); track propertyKey) {
+          @if (propertyKey !== 'folderId') {
+            <ion-item>
+              <ion-label position="stacked">
+                {{ getPropertyTitle(propertyKey) }}
+                @if (isRequired(propertyKey)) {
+                  <span style="color: var(--ion-color-danger);">*</span>
+                }
+                @if (getPropertyDescription(propertyKey)) {
+                  <ion-note>{{ getPropertyDescription(propertyKey) }}</ion-note>
+                }
+              </ion-label>
+              @if (isTextArea(propertyKey)) {
+                <ion-textarea
+                  [formControlName]="propertyKey"
+                  [placeholder]="getPropertyPlaceholder(propertyKey)"
+                  rows="3"
+                  [class.ion-invalid]="isFieldInvalid(propertyKey)"
+                  [class.ion-touched]="getFormControl(propertyKey)?.touched">
+                </ion-textarea>
+              } @else if (isRangeInput(propertyKey)) {
+                <div style="width: 100%; margin: 8px 0;">
+                  <ion-range
+                    [formControlName]="propertyKey"
+                    [min]="getPropertyMinimum(propertyKey)"
+                    [max]="getPropertyMaximum(propertyKey)"
+                    [pin]="true"
+                    [snaps]="getPropertyStep(propertyKey) ? true : false"
+                    [ticks]="false"
+                    [step]="getPropertyStep(propertyKey) || 1"
+                    style="width: 100%;">
+                    <ion-label slot="start">{{ getPropertyMinimum(propertyKey) }}</ion-label>
+                    <ion-label slot="end">{{ getPropertyMaximum(propertyKey) }}</ion-label>
+                  </ion-range>
+                  <div style="text-align: center; margin-top: 4px;">
+                    <ion-note>
+                      Valor atual: {{ getFormControl(propertyKey)?.value || getPropertyMinimum(propertyKey) }}
+                    </ion-note>
+                  </div>
+                </div>
+              } @else if (getPropertyType(propertyKey) === 'integer') {
+                <ion-input
+                  [formControlName]="propertyKey"
+                  type="number"
+                  [placeholder]="getPropertyPlaceholder(propertyKey)"
+                  [min]="getPropertyMinimum(propertyKey)"
+                  [max]="getPropertyMaximum(propertyKey)"
+                  [step]="getPropertyStep(propertyKey)"
+                  [class.ion-invalid]="isFieldInvalid(propertyKey)"
+                  [class.ion-touched]="getFormControl(propertyKey)?.touched">
+                </ion-input>
+              } @else {
+                <ion-input
+                  [formControlName]="propertyKey"
+                  type="text"
+                  [placeholder]="getPropertyPlaceholder(propertyKey)"
+                  [class.ion-invalid]="isFieldInvalid(propertyKey)"
+                  [class.ion-touched]="getFormControl(propertyKey)?.touched">
+                </ion-input>
+              }
+              @if (isFieldInvalid(propertyKey)) {
+                <ion-note slot="error">{{ getFieldErrorMessage(propertyKey) }}</ion-note>
+              }
+            </ion-item>
+          }
+        }
+        
+        <div style="padding: 16px 0; display: flex; gap: 12px;">
+          <ion-button 
+            type="submit" 
+            expand="block" 
+            [disabled]="formGroup.invalid || loading()"
+            color="primary">
+            @if (loading()) {
+              Processando...
+            } @else {
+              Executar Workflow
+            }
+          </ion-button>
+          
+          <ion-button 
+            type="button" 
+            expand="block" 
+            fill="outline"
+            (click)="onReset()"
+            [disabled]="loading()">
+            Limpar
+          </ion-button>
+        </div>
+      </form>
+    } @else {
+      <ion-item>
+        <ion-label>
+          <p>Carregando configuração do workflow...</p>
+        </ion-label>
+      </ion-item>
+    }
+  </ion-card-content>
+</ion-card>

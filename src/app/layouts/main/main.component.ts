@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonButtons, IonMenuButton, IonButton, IonFooter, IonList, IonFabButton, IonFabList, IonFab } from '@ionic/angular/standalone';
+import { IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonButtons, IonMenuButton, IonButton, IonFooter, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { homeOutline, folderOutline, logOutOutline, settingsOutline, personOutline, chevronDownCircle, document, colorPalette, globe, chevronForwardCircle, chevronUpCircle } from 'ionicons/icons';
 import { AuthService } from '../../core/auth.service';
@@ -11,10 +11,8 @@ import { AuthService } from '../../core/auth.service';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
   standalone: true,
-  imports: [IonFab, IonFabList, IonFabButton, 
-    CommonModule, RouterModule, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle,
-    IonContent, IonList, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet,
-    IonButtons, IonMenuButton, IonButton, IonFooter
+  imports: [CommonModule, RouterModule, IonSplitPane, IonMenu, IonHeader, IonToolbar, IonTitle,
+    IonContent, IonList, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonButton, IonFooter
   ],
 })
 export class MainLayoutComponent {

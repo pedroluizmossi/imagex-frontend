@@ -1,14 +1,68 @@
-<ion-menu-button></ion-menu-button>
+<div id="container">
+  <strong>Welcome to ImageX!</strong>
+  
+  @if (selectedWorkflow()) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Workflow Selecionado</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h3>{{ selectedWorkflow()?.name }}</h3>
+        <p>{{ selectedWorkflow()?.description }}</p>
+        <p><strong>Tipo:</strong> {{ selectedWorkflow()?.workflowType }}</p>
+      </ion-card-content>
+    </ion-card>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    @if (loadingSchema()) {
+      <ion-card>
+        <ion-card-content>
+          <p>Carregando configuração do workflow...</p>
+        </ion-card-content>
+      </ion-card>
+    } @else if (uiSchema()) {
+      <dynamic-ui 
+        [workflowId]="selectedWorkflow()!.id"
+        [schema]="uiSchema()"
+        [disabled]="executingWorkflow()"
+        (formSubmitted)="onFormSubmitted($event)">
+      </dynamic-ui>
+    }
 
-  <div id="container">
-    <strong>Welcome to ImageX!</strong>
-    <p>Your image generation workflow orchestration platform is ready to use.</p>
-  </div>
-</ion-content>
+    @if (executingWorkflow()) {
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Executando Workflow</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <ion-spinner></ion-spinner>
+            <ion-text>Processando seu request...</ion-text>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    }
+  } @else {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Nenhum Workflow Selecionado</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Selecione um workflow para começar a usar o ImageX.</p>
+      </ion-card-content>
+    </ion-card>
+  }
+  
+  <ion-button id="open-workflow-modal" expand="block">
+    @if (selectedWorkflow()) {
+      Trocar Workflow
+    } @else {
+      Selecionar Workflow
+    }
+  </ion-button>
+  
+  <workflow-modal 
+    trigger="open-workflow-modal" 
+    [workflowType]="'IMAGE'"
+    (workflowSelected)="onWorkflowSelected($event)">
+  </workflow-modal>
+</div>

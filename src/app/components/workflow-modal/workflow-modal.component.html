@@ -1,0 +1,46 @@
+
+<ion-modal trigger="open-workflow-modal" (willPresent)="fetchWorkflows()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="close()">Fechar</ion-button>
+        </ion-buttons>
+        <ion-title>Workflows</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        @for (workflow of filteredWorkflows; track workflow.id) {
+          <ion-item 
+            lines="full" 
+            button 
+            (click)="selectWorkflow(workflow)"
+            [class.selected-workflow]="isLastSelected(workflow)">
+            <div>
+              <strong>{{ workflow.name }}</strong>
+              @if (isLastSelected(workflow)) {
+                <ion-badge color="primary" style="margin-left: 8px;">Último usado</ion-badge>
+              }
+              <p>{{ workflow.description }}</p>
+            </div>
+          </ion-item>
+        }
+        @if (filteredWorkflows.length === 0 && !loading()) {
+          <ion-item>
+            <div>
+              <p>Nenhum workflow encontrado para este tipo.</p>
+            </div>
+          </ion-item>
+        }
+        @if (loading()) {
+          <ion-item>
+            <div>
+              <p>Carregando workflows...</p>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
